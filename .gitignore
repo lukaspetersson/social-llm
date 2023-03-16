@@ -1,7 +1,5 @@
 .env
-big_data/*
-.chroma/*
-chroma_logs.log
+data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

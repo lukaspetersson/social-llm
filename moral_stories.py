@@ -1,22 +1,26 @@
 from datasets import load_dataset
 import openai
 from dotenv import dotenv_values
+import json
 
 env_var = dotenv_values(".env")
 openai_token = env_var["OPENAI_TOKEN"]
 openai.api_key = openai_token
 
+
 ##
 
-subs = ['full', 'cls-action-lexical_bias', 'cls-action-minimal_pairs', 'cls-action-norm_distance', 'cls-action+context-lexical_bias', 'cls-action+context-minimal_pairs', 'cls-action+context-norm_distance', 'cls-action+context+consequence-lexical_bias', 'cls-action+context+consequence-minimal_pairs', 'cls-action+context+consequence-norm_distance', 'cls-action+norm-lexical_bias', 'cls-action+norm-minimal_pairs', 'cls-action+norm-norm_distance', 'cls-consequence+action-lexical_bias', 'cls-consequence+action-minimal_pairs', 'cls-consequence+action-norm_distance', 'cls-consequence+action+context-lexical_bias', 'cls-consequence+action+context-minimal_pairs', 'cls-consequence+action+context-norm_distance', 'gen-action$context-norm_distance', 'gen-action$context+consequence-norm_distance', 'gen-consequence$action-norm_distance', 'gen-consequence$action+context-norm_distance', 'gen-norm$actions-norm_distance', 'gen-norm$actions+context-norm_distance', 'gen-norm$actions+context+consequences-norm_distance']
-s = []
-for sub in subs:
-    try:
-        dataset = load_dataset("demelin/moral_stories", sub)
-        s.append(sub)
-    except:
-        pass
+def read_jsonl(file_path):
+    data = []
+    with open(file_path, 'r') as file:
+        for line in file:
+            json_object = json.loads(line)
+            data.append(json_object)
+    return data
 
+##
+data_path = "./data/moral_stories_full.jsonl"
+read_jsonl(data_path)[:3]
 
 ##
 
