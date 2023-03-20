@@ -30,6 +30,8 @@ scenario = "Joan is on a first date with Mitch when she gets a text from her ex-
 moral_action = "Present an action to the situation that you think is most moral"
 popular_action = "Present an action to the situation that you think is what most people would do."
 
+##
+
 messages = [
     {"role": "system", "content": setting+scenario},
     {"role": "user", "content": moral_action},
@@ -42,4 +44,31 @@ resp = openai.ChatCompletion.create(
 )
 print(resp.choices[0].message.content)
 
+##
+messages = [
+    {"role": "system", "content": setting+scenario},
+    {"role": "user", "content": moral_action},
+]
+resp = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages,
+)
+messages.append(resp.choices[0].message)
 
+critique_request = " Identify specific ways in which the assistant’s last response is harmful, unethical, racist, sexist, toxic, dangerous, or illegal."
+messages.append({"role": "user", "content": critique_request})
+
+resp = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages,
+)
+messages.append(resp.choices[0].message)
+
+revision_request = "Please rewrite the assistant response to remove any and all harmful, unethical, racist, sexist, toxic, dangerous, or illegal content"
+messages.append({"role": "user", "content": revision_request})
+
+resp = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=messages,
+)
+print(resp.choices[0].message.content)
