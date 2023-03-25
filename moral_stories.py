@@ -131,7 +131,7 @@ resp = openai.ChatCompletion.create(
 print(resp.choices[0].message.content)
 
 ## Demographics
-demographics_instr = "For each of the following demographics types of ("+", ".join(perspectives["Demographics"])+"), make up two different personas and  answer what the best action to the moral dilemma is for each."
+demographics_instr = "For each of the following demographics types ("+", ".join(perspectives["Demographics"])+"), make up two different personas and answer what the best action to the moral dilemma is for each. Give only one action per persona."
 messages = [
     {"role": "system", "content": setting+scenario},
     {"role": "user", "content": demographics_instr},
