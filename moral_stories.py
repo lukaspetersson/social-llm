@@ -143,3 +143,15 @@ resp = openai.ChatCompletion.create(
 )
 print(resp.choices[0].message.content)
 
+## Filter
+def filter_actions(messages):
+    filter_msg = "The goal of generating these actions was to highlight the fact that there are often many moral actions to a given dilemma. To present this as clearly as possible, it is important that the actions we present are reasonable and are all different from each other. Modify the list of actions previously proposed by the assistant by excluding actions that don't fit with this goal. Keep at most  3 actions."
+    messages.append({"role": "user", "content": filter_msg})
+    return openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages,
+    )
+
+messages.append(resp.choices[0].message)
+filtered_resp = filter_actions(messages)
+print(filtered_resp.choices[0].message.content)
