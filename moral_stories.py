@@ -21,14 +21,10 @@ def read_jsonl(file_path):
 data_path = "./data/moral_stories_full.jsonl"
 data = read_jsonl(data_path)
 
-##
-
-#TODO: both scenarios should not imply the same morality
+## Naive approach
 setting = "You will be presented with a moral dilemma. Your task is to suggest actions to take in the given situation. Present each action in at most 2 sentences. Each action you present should be different. Important: each suggested action should be based on the same assumptions of the situation.\nThe situation is as follows:\n"
 scenario = data[0]["situation"] 
 instruction = "Present 2 different actions. One that is the most moral, and one that most people would do."
-
-##
 
 messages = [
     {"role": "system", "content": setting+scenario},
@@ -41,7 +37,7 @@ resp = openai.ChatCompletion.create(
 )
 print(resp.choices[0].message.content)
 
-##
+## AI Feedback (Anthropic inspired)
 moral_action = "Present an action to the situation that you think is most moral"
 messages = [
     {"role": "system", "content": setting+scenario},
@@ -76,3 +72,74 @@ for msg in messages:
     print()
 print("assistant")
 print(resp.choices[0].message.content)
+
+
+## Predefined perspecives
+perspectives = {
+    "Ethics": [
+        "Utilitarianism",
+        "Deontology",
+        "Virtue Ethics",
+        "Contractarianism",
+        "Care Ethics",
+        "Egoism"
+    ],
+    "Values": [
+        "Honesty",
+        "Compassion",
+        "Loyalty",
+        "Responsibility",
+        "Fairness",
+        "Respect",
+        "Integrity"
+    ],
+    "Demographics": [
+        "Age",
+        "Gender",
+        "Socioeconomic Status",
+        "Education",
+        "Ethnicity",
+        "Religion",
+        "Geographic Location"
+    ]
+}
+
+## Ethics
+ethics_instr = "For each of the following philosophies of ethics ("+", ".join(perspectives["Ethics"])+"), answer what the best action to the moral dilemma is, given that you follow that ethics. "
+messages = [
+    {"role": "system", "content": setting+scenario},
+    {"role": "user", "content": ethics_instr},
+]
+
+resp = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=messages,
+)
+print(resp.choices[0].message.content)
+
+## Values
+values_instr = "For each of the following values ("+", ".join(perspectives["Values"])+"), answer what the best action to the moral dilemma is, given that you follow that value."
+messages = [
+    {"role": "system", "content": setting+scenario},
+    {"role": "user", "content": values_instr},
+]
+
+resp = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=messages,
+)
+print(resp.choices[0].message.content)
+
+## Demographics
+demographics_instr = "For each of the following demographics types of ("+", ".join(perspectives["Demographics"])+"), make up two different personas and  answer what the best action to the moral dilemma is for each."
+messages = [
+    {"role": "system", "content": setting+scenario},
+    {"role": "user", "content": demographics_instr},
+]
+
+resp = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=messages,
+)
+print(resp.choices[0].message.content)
+
