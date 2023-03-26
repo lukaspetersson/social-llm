@@ -49,7 +49,7 @@ resp = openai.ChatCompletion.create(
 )
 messages.append(resp.choices[0].message)
 
-critique_request = " Identify a perspective from which the assistant’s last response is could be not the most moral."
+critique_request = " Identify a perspective from which the assistant’s last response is not the most moral."
 messages.append({"role": "user", "content": critique_request})
 
 resp = openai.ChatCompletion.create(
@@ -155,3 +155,9 @@ def filter_actions(messages):
 messages.append(resp.choices[0].message)
 filtered_resp = filter_actions(messages)
 print(filtered_resp.choices[0].message.content)
+
+#TODO:
+# Political compass, personas
+# Influence LLM to answer with your preferences
+# Finetune gpt3/alpaca
+# Generate moral dilemmas (more specific scenarios)
