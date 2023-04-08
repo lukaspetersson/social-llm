@@ -155,9 +155,3 @@ def filter_actions(messages):
 messages.append(resp.choices[0].message)
 filtered_resp = filter_actions(messages)
 print(filtered_resp.choices[0].message.content)
-
-#TODO:
-# Political compass, personas
-# Influence LLM to answer with your preferences
-# Finetune gpt3/alpaca
-# Generate moral dilemmas (more specific scenarios)
