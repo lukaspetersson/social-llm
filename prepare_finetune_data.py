@@ -21,5 +21,7 @@ with open("./data/dilemma_prompts.jsonl", "w", encoding='utf-8') as file:
         }
         prompt_json = json.dumps(prompt_dict)
         file.write(prompt_json)
-        if i != len(data)-1:
+        if i == 1000:
+            break
+        else:
             file.write("\n")
